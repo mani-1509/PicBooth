@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photobooth</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/photobooth.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/pixel.css') }}"
+    />
+  </head>
+  <body>
+    <a href="javascript:history.back()">
+      <img
+        class="back-button"
+        src="{{ url_for('static', filename='images/back-button.png') }}"
+        alt="back-button"
+      />
+    </a>
+    <div class="photobooth-container">
+      <h1>Photobooth</h1>
+      <video
+        id="video"
+        autoplay
+        playsinline
+        width="320"
+        height="240"
+        class="pixel-frame"
+      ></video>
+      <div id="countdown" class="pixel-countdown"></div>
+      <button id="take-photos-btn" class="pixel-btn">Take 3 Photos</button>
+      <div class="strip-orientation">
+        <label>
+          <input type="radio" name="orientation" value="horizontal" checked />
+          Horizontal
+        </label>
+        <label>
+          <input type="radio" name="orientation" value="vertical" />
+          Vertical
+        </label>
+      </div>
+      <div id="strip" class="photo-strip" style="display: none">
+        <canvas id="canvas1" width="160" height="120"></canvas>
+        <canvas id="canvas2" width="160" height="120"></canvas>
+        <canvas id="canvas3" width="160" height="120"></canvas>
+      </div>
+      <div id="actions" style="display: none">
+        <button id="download-btn" class="pixel-btn">Download</button>
+        <button id="save-btn" class="pixel-btn">Save</button>
+      </div>
+      <div
+        id="save-loader"
+        style="display: none; text-align: center; margin-top: 1em"
+      >
+        <span class="pixel-loader"></span>
+        <span style="font-family: inherit">Saving...</span>
+      </div>
+      <hr />
+      <button id="emotion-btn" class="pixel-btn">Pic Chat</button>
+        <!-- Chatbot UI goes here -->
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/photobooth.js') }}"></script>
+  </body>
+</html>

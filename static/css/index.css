@@ -1,0 +1,204 @@
+html,
+body {
+  height: 100%;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+body {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #181818 0%, #222 100%);
+  display: block;
+  font-size: 0.8rem;
+}
+.cover-hero {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #ff00cc 0%, #181818 100%);
+  box-shadow: 0 8px 32px #000a;
+  position: relative;
+  z-index: 1;
+  padding: 0 0 2em 0;
+}
+.landing-logo {
+  font-size: 3.2rem;
+  color: #ffe066;
+  text-shadow: 2px 2px 0 #000, 6px 6px 0 #ff00cc;
+  margin-bottom: 0.5em;
+  font-family: "Jersey 10", monospace;
+  letter-spacing: 2px;
+  margin-top: 2.5rem;
+}
+.landing-desc {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 2em;
+  text-shadow: 1px 1px 0 #000;
+  max-width: 600px;
+  font-family: "Press Start 2P", monospace;
+}
+.pixel-btn-group {
+  margin: 1.5em 0 2em 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+}
+
+.pixel-btn {
+  background: #ff00cc;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 0.8em 1.5em;
+  font-family: "Press Start 2P", monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+  transition: background-color 0.3s, color 0.3s, transform 0.1s;
+}
+
+.pixel-btn:hover {
+  background: #fff;
+  color: #ff00cc;
+  border-color: #ff00cc;
+}
+.pixel-btn:active {
+  transform: translateY(2px) scale(0.95);
+}
+.pixel-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #ff00cc, 0 0 8px #000;
+}
+
+.feature-section {
+  background: #181818;
+  border-top: 4px solid #ff00cc;
+  border-bottom: 4px solid #ffe066;
+  box-shadow: 0 4px 24px #000a;
+  padding: 3em 0 2em 0;
+  margin: 0;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.feature-list {
+  text-align: left;
+  margin: 1.5em auto 1em auto;
+  max-width: 540px;
+  color: #fff;
+  font-size: 1.1rem;
+  padding-left: 1.2em;
+}
+.feature-list li {
+  margin-bottom: 1.1em;
+  list-style: square;
+}
+.how-section {
+  background: #222;
+  color: #ffe066;
+  padding: 3em 0 2em 0;
+  width: 100vw;
+  border-top: 4px solid #ffe066;
+  border-bottom: 4px solid #ff00cc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.how-list {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  color: #fff;
+  font-size: 1.05em;
+}
+.how-list li {
+  background: #181818;
+  border-left: 4px solid #ff00cc;
+  margin-bottom: 1.5em;
+  padding: 1em 1.5em;
+  box-shadow: 2px 2px 0 #000;
+  border-radius: 0 8px 8px 0;
+}
+.testimonial-section {
+  background: #181818;
+  color: #ffe066;
+  padding: 3em 0 2em 0;
+  width: 100vw;
+  border-top: 4px solid #ff00cc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.testimonial-list {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.testimonial-list li {
+  background: #222;
+  border-left: 4px solid #ff00cc;
+  margin-bottom: 1.5em;
+  padding: 1em 1.5em;
+  font-size: 1.05em;
+  box-shadow: 2px 2px 0 #000;
+  border-radius: 0 8px 8px 0;
+}
+.about-section {
+  background: #181818;
+  color: #fff;
+  padding: 3em 0 2em 0;
+  width: 100vw;
+  border-top: 4px solid #ff00cc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.about-content {
+  max-width: 700px;
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: #ffe066;
+  text-shadow: 1px 1px 0 #000;
+  margin-bottom: 1.5em;
+}
+.footer {
+  width: 100vw;
+  background: #222;
+  color: #ff00cc;
+  text-align: center;
+  padding: 1.2em 0 1em 0;
+  font-size: 1em;
+  border-top: 2px solid #ff00cc;
+  letter-spacing: 1px;
+}
+@media (max-width: 700px) {
+  .landing-logo {
+    font-size: 2rem;
+  }
+  .landing-desc {
+    font-size: 1.05rem;
+  }
+  .feature-list,
+  .about-content,
+  .testimonial-list li,
+  .how-list li {
+    font-size: 0.98em;
+  }
+  .cover-hero,
+  .feature-section,
+  .testimonial-section,
+  .about-section,
+  .footer,
+  .how-section {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+}
