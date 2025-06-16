@@ -16,38 +16,60 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/pixel.css') }}"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {},
+        },
+      };
+    </script>
   </head>
   <body>
     <div class="cover-hero">
+      <div
+        class="bg-grid absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#3b3b3b1a_1px,transparent_1px),linear-gradient(to_bottom,#3b3b3b1a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"
+      ></div>
       <div class="landing-logo">📸 PicBooth</div>
       <div class="landing-desc">
-        <b>Welcome to your pixel-perfect memory companion!</b><br />
+        <b>Welcome to your pixel-perfect companion!</b><br />
         Capture moments, analyze emotions, and chat with AI—all in a playful,
         private space.
       </div>
+
       <div class="pixel-btn-group">
         {% if user %}
-        <span style="color: #ffe066; align-self: center"
-          >Welcome back, <b>{{ username or user }}</b>!</span
-        >
-        <a href="{{ url_for('photobooth') }}" class="pixel-btn"
-          >Go to Photobooth</a
-        >
-        <a href="{{ url_for('picchat') }}" class="pixel-btn">Try Pic Chat</a>
-        <a href="{{ url_for('chat') }}" class="pixel-btn">Open AI Chat</a>
-        <a
-          href="{{ url_for('auth.logout') }}"
-          class="pixel-btn"
-          style="background: #222; color: #ff00cc; border-color: #ff00cc"
-          >Logout</a
-        >
+        <div class="welcome-msg">
+          Welcome back, <b>{{ username or user }}</b>!
+        </div>
+
+        <div class="main-buttons">
+          <a href="{{ url_for('photobooth') }}" class="pixel-btn">
+            Go to Photobooth
+          </a>
+          <a href="{{ url_for('picchat') }}" class="pixel-btn">Try Pic Chat</a>
+          <a href="{{ url_for('chat') }}" class="pixel-btn">Open AI Chat</a>
+        </div>
+
+        <a href="{{ url_for('auth.logout') }}" class="pixel-btn logout-btn">
+          Logout
+        </a>
         {% else %}
-        <a href="{{ url_for('auth.login') }}" class="pixel-btn">Login</a>
-        <a href="{{ url_for('auth.signup') }}" class="pixel-btn">Sign Up</a>
-        <a href="{{ url_for('photobooth') }}" class="pixel-btn"
-          >Try Photobooth</a
-        >
-        <a href="{{ url_for('picchat') }}" class="pixel-btn">Try Pic Chat</a>
+        <div class="auth-buttons">
+          <a href="{{ url_for('auth.login') }}" class="pixel-btn">Login</a>
+          <a href="{{ url_for('auth.signup') }}" class="pixel-btn">Sign Up</a>
+        </div>
+
+        <div class="main-buttons">
+          <a href="{{ url_for('photobooth') }}" class="pixel-btn">
+            Try Photobooth
+          </a>
+          <a href="{{ url_for('picchat') }}" class="pixel-btn">Try Pic Chat</a>
+        </div>
         {% endif %}
       </div>
     </div>
