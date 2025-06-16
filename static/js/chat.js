@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const chatMessages = document.getElementById("chat-messages");
   const chatForm = document.getElementById("chat-form");
   const chatInput = document.getElementById("chat-input");
+  const chatLoader = document.getElementById("chat-loader");
 
   // Show the analysis as a system message (UI only)
   chatMessages.innerHTML = `<div class="system-msg">${analysis}</div>`;
@@ -52,7 +53,10 @@ Keep it chill. One line. One question. Like you're just texting your friend.
     chatInput.value = "";
     history.push({ role: "user", content: msg });
 
+    chatLoader.style.display = "flex";
     const botResult = await callBotAPI(null, history);
+    chatLoader.style.display = "none";
+
     appendMessage(botResult.reply, "bot", botResult.think);
     history.push({ role: "assistant", content: botResult.reply });
     chatMessages.scrollTop = chatMessages.scrollHeight;

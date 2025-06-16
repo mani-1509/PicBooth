@@ -2,186 +2,61 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <title>My Photo History | PicBooth</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat History | PicBooth</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/pixel.css') }}"
     />
     <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/history.css') }}"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/chat.css') }}"
-    />
-    <style>
-      .history-container {
-        max-width: 900px;
-        margin: 2em auto;
-        background: #181818;
-        border: 4px solid #ff00cc;
-        box-shadow: 8px 8px 0 #000;
-        border-radius: 0;
-        padding: 2em 1em 2em 1em;
-        display: flex;
-        gap: 2em;
-        min-height: 70vh;
-      }
-      .conversation-list {
-        width: 260px;
-        min-width: 180px;
-        background: #232323;
-        border-right: 2px solid #ff00cc;
-        padding: 1em 0.5em;
-        overflow-y: auto;
-        max-height: 70vh;
-      }
-      .conversation-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      .conversation-list li {
-        padding: 0.7em 1em;
-        margin-bottom: 0.7em;
-        background: #181818;
-        color: #ffe066;
-        border-left: 4px solid #ff00cc;
-        cursor: pointer;
-        border-radius: 0 8px 8px 0;
-        transition: background 0.2s;
-        font-size: 1em;
-        word-break: break-word;
-      }
-      .conversation-list li.active,
-      .conversation-list li:hover {
-        background: #ff00cc;
-        color: #fff;
-      }
-      .messages-view {
-        flex: 1;
-        background: #111;
-        border-radius: 0 8px 8px 0;
-        padding: 1em;
-        min-height: 300px;
-        max-height: 70vh;
-        overflow-y: auto;
-        font-size: 0.98em;
-      }
-      .message-bubble {
-        margin-bottom: 1.2em;
-        padding: 0.6em 1em;
-        border-radius: 0 8px 8px 0;
-        background: #232323;
-        color: #fff;
-        border-left: 4px solid #ff00cc;
-        box-shadow: 2px 2px 0 #000;
-        max-width: 90%;
-        word-break: break-word;
-      }
-      .message-bubble.user {
-        background: #222;
-        color: #ffe066;
-        border-left: 4px solid #ffe066;
-        text-align: right;
-        margin-left: auto;
-        border-radius: 8px 0 0 8px;
-      }
-      .message-bubble.bot {
-        background: #181818;
-        color: #fff;
-        border-left: 4px solid #ff00cc;
-        text-align: left;
-        margin-right: auto;
-      }
-      .timestamp {
-        font-size: 0.8em;
-        color: #aaa;
-        margin-top: 0.2em;
-        display: block;
-        text-align: right;
-      }
-      @media (max-width: 900px) {
-        .history-container {
-          flex-direction: column;
-          gap: 1em;
-        }
-        .conversation-list {
-          width: 100%;
-          max-width: 100vw;
-          border-right: none;
-          border-bottom: 2px solid #ff00cc;
-        }
-        .messages-view {
-          border-radius: 0 0 8px 8px;
-        }
-      }
-    </style>
   </head>
   <body>
-    <div class="history-container">
-      <div class="conversation-list">
-        <h2
-          style="color: #ff00cc; text-shadow: 1px 1px 0 #000; font-size: 1.1em"
-        >
-          Your Conversations
-        </h2>
-        <ul id="conv-list">
-          {% for conv in conversations %}
-          <li data-id="{{ conv.id }}">
-            <b>{{ conv.created_at[:10] }}</b><br />
-            <span style="font-size: 0.95em"
-              >{{ conv.preview|truncate(60) }}</span
-            >
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="messages-view" id="messages-view">
-        <div style="color: #ffe066; text-align: center">
-          Select a conversation to view messages.
+    <a href="javascript:history.back()">
+      <img
+        class="back-button"
+        src="{{ url_for('static', filename='images/back-button.png') }}"
+        alt="back-button"
+      />
+    </a>
+    <div class="history-gallery">
+      <div class="history-title">📸 My PhotoBooth History</div>
+      {% if photos %}
+      <div class="photo-grid">
+        {% for photo in photos %}
+        <div class="photo-card">
+          <img src="{{ photo.image_url }}" alt="Photo strip" />
+          <div class="photo-meta">
+            {{ photo.created_at[:16].replace('T', ' ') }}<br />
+            Orientation: {{ photo.orientation|capitalize }}
+          </div>
+          <a class="download-btn" href="{{ photo.image_url }}" download>
+            <span class="download-icon">⬇️</span>Download
+          </a>
+          <button class="remove-btn" data-url="{{ photo.image_url }}">
+            <span class="remove-icon">🗑️</span>Remove
+          </button>
         </div>
+        {% endfor %}
       </div>
+      {% else %}
+      <div style="color: #ff00cc; text-align: center; font-size: 1.2em">
+        No saved photo strips yet.<br />
+        <a
+          href="{{ url_for('photobooth') }}"
+          class="pixel-btn"
+          style="margin-top: 1em"
+          >Go to Photobooth</a
+        >
+      </div>
+      {% endif %}
     </div>
-    <script>
-      const convList = document.getElementById("conv-list");
-      const messagesView = document.getElementById("messages-view");
-      let activeLi = null;
-
-      convList.querySelectorAll("li").forEach((li) => {
-        li.onclick = async () => {
-          if (activeLi) activeLi.classList.remove("active");
-          li.classList.add("active");
-          activeLi = li;
-          messagesView.innerHTML =
-            "<div style='color:#ffe066;text-align:center;'>Loading...</div>";
-          const convId = li.dataset.id;
-          const res = await fetch(
-            `/history_messages?conversation_id=${convId}`
-          );
-          const messages = await res.json();
-          if (!messages.length) {
-            messagesView.innerHTML =
-              "<div style='color:#ff00cc;text-align:center;'>No messages in this conversation.</div>";
-            return;
-          }
-          messagesView.innerHTML = "";
-          messages.forEach((msg) => {
-            const div = document.createElement("div");
-            div.className =
-              "message-bubble " + (msg.sender === "user" ? "user" : "bot");
-            div.textContent = msg.message;
-            const ts = document.createElement("span");
-            ts.className = "timestamp";
-            ts.textContent = new Date(msg.timestamp).toLocaleString();
-            div.appendChild(ts);
-            messagesView.appendChild(div);
-          });
-          messagesView.scrollTop = messagesView.scrollHeight;
-        };
-      });
-    </script>
+    <script src="{{ url_for('static', filename='js/history.js') }}"></script>
   </body>
 </html>

@@ -151,5 +151,41 @@ def chat_api():
 
     return jsonify({'reply': reply, 'thinking': think})
 
+@app.route('/history')
+def history():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('auth.login'))
+    # Fetch all photo strips for this user, newest first
+    result = supabase.table("photo_strips").select("image_url, orientation, created_at").eq("user_id", user_id).order("created_at", desc=True).execute()
+    photos = result.data or []
+    return render_template("history.html", photos=photos)
+
+@app.route('/delete_photo', methods=['POST'])
+def delete_photo():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"success": False, "error": "Not logged in"}), 401
+
+    image_url = request.json.get('image_url')
+    if not image_url:
+        return jsonify({"success": False, "error": "No image URL provided"}), 400
+
+    # Extract the storage path from the public URL
+    # Example: .../object/public/photobooth/mani_gmail_com/filename.png
+    try:
+        path_start = image_url.index('/photobooth/')
+        storage_path = image_url[path_start + 1:]  # remove leading slash
+    except ValueError:
+        return jsonify({"success": False, "error": "Invalid image URL"}), 400
+
+    # Delete from Supabase Storage
+    supabase.storage.from_('photobooth').remove([storage_path])
+
+    # Optionally, delete from photo_strips table
+    supabase.table("photo_strips").delete().eq("image_url", image_url).eq("user_id", user_id).execute()
+
+    return jsonify({"success": True})
+
 if __name__ == '__main__':
     app.run(debug=True)
