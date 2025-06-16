@@ -39,8 +39,6 @@ h1 {
 #video {
   display: block;
   margin: 2rem auto 1rem auto;
-  border: 6px solid #fff;
-  box-shadow: 0 0 0 4px #ff00cc, 0 0 16px 4px #000;
   image-rendering: pixelated;
   background: #111;
 }
@@ -59,14 +57,21 @@ h1 {
 /* Photo strip */
 .photo-strip {
   display: flex;
-  gap: 8px;
-  margin: 16px 0;
-  background: none;
-  border: none;
-  box-shadow: none;
-  justify-content: center;
-  align-items: center;
+  gap: 0; /* <--- remove gap */
+  margin: 0;
   padding: 0;
+}
+
+.photo-strip.vertical {
+  flex-direction: column;
+  width: 160px;
+  min-height: auto;
+}
+
+.photo-strip.horizontal {
+  flex-direction: row;
+  width: auto;
+  min-height: auto;
 }
 
 /* Orientation strip for photo options */
@@ -177,4 +182,57 @@ button:active {
     max-width: 95vw;
     font-size: 0.85rem;
   }
+}
+.flash-effect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  opacity: 0.8;
+  z-index: 9999;
+  animation: flash 0.3s ease-out;
+  pointer-events: none;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+#video {
+  border: 8px solid transparent;
+  border-radius: 12px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* Frame Styles */
+.frame1 {
+  border: 8px solid #00bfff; /* Blue glow */
+  box-shadow: 0 0 15px #00bfff;
+}
+
+.frame2 {
+  border: 8px dashed #00ff66; /* Retro green */
+  box-shadow: 0 0 10px #00ff66;
+}
+
+.frame3 {
+  border: 8px dotted #ff66cc; /* Pink arcade */
+  box-shadow: 0 0 15px #ff66cc;
+}
+
+.frame4 {
+  border: 8px double #ff3300; /* Fire pixel */
+  box-shadow: 0 0 20px #ff3300;
+}
+
+.frame5 {
+  border: 8px groove #9933ff; /* Cyberpunk */
+  box-shadow: 0 0 20px #9933ff;
 }

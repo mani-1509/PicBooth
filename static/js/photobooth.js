@@ -1,137 +1,134 @@
 const video = document.getElementById("video");
-const countdown = document.getElementById("countdown");
-const strip = document.getElementById("strip");
-const actions = document.getElementById("actions");
 const takePhotosBtn = document.getElementById("take-photos-btn");
+const strip = document.getElementById("strip");
+const countdownEl = document.getElementById("countdown");
 const downloadBtn = document.getElementById("download-btn");
 const saveBtn = document.getElementById("save-btn");
-const canvas1 = document.getElementById("canvas1");
-const canvas2 = document.getElementById("canvas2");
-const canvas3 = document.getElementById("canvas3");
+const actions = document.getElementById("actions");
 const saveLoader = document.getElementById("save-loader");
+const frameSelect = document.getElementById("frameSelect");
+const orientationRadios = document.getElementsByName("orientation");
 
-let stream;
+const canvases = [
+  document.getElementById("canvas1"),
+  document.getElementById("canvas2"),
+  document.getElementById("canvas3"),
+];
 
-async function startCamera() {
-  stream = await navigator.mediaDevices.getUserMedia({ video: true });
+navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
   video.srcObject = stream;
+});
+
+// Update video frame class on selection
+frameSelect.addEventListener("change", () => {
+  video.className = frameSelect.value;
+});
+
+function getSelectedOrientation() {
+  for (let radio of orientationRadios) {
+    if (radio.checked) return radio.value;
+  }
+  return "horizontal";
+}
+
+function applyFrameToCanvas(ctx, canvas, frameClass) {
+  const frameStyles = {
+    frame1: { color: "#00bfff", blur: 15, dash: [] },
+    frame2: { color: "#00ff66", blur: 10, dash: [10, 5] },
+    frame3: { color: "#ff66cc", blur: 15, dash: [2, 5] },
+    frame4: { color: "#ff3300", blur: 20, dash: [] },
+    frame5: { color: "#9933ff", blur: 20, dash: [] },
+  };
+
+  const style = frameStyles[frameClass];
+  if (style) {
+    ctx.strokeStyle = style.color;
+    ctx.lineWidth = 8;
+    ctx.shadowColor = style.color;
+    ctx.shadowBlur = style.blur;
+    ctx.setLineDash(style.dash);
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    ctx.setLineDash([]);
+  }
+}
+
+function flashEffect() {
+  const flash = document.getElementById("flash");
+  flash.className = "flash-effect";
+  flash.style.display = "block";
+  setTimeout(() => {
+    flash.style.display = "none";
+    flash.className = "";
+  }, 300);
 }
 
 async function takePhotos() {
-  strip.style.display = "none";
+  strip.style.display = "flex";
   actions.style.display = "none";
-  let canvases = [canvas1, canvas2, canvas3];
-  let photos = [];
-  for (let i = 0; i < 3; i++) {
-    countdown.innerText = 3 - i;
-    await new Promise((r) => setTimeout(r, 1000));
+  saveLoader.style.display = "none";
+  const frameClass = video.classList[0];
+
+  for (let i = 0; i < canvases.length; i++) {
+    countdownEl.textContent = 3;
+    await new Promise((res) => setTimeout(res, 1000));
+    countdownEl.textContent = 2;
+    await new Promise((res) => setTimeout(res, 1000));
+    countdownEl.textContent = 1;
+    await new Promise((res) => setTimeout(res, 1000));
+    countdownEl.textContent = "";
+
+    const canvas = canvases[i];
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    applyFrameToCanvas(ctx, canvas, frameClass);
+    flashEffect();
   }
-  for (let i = 0; i < 3; i++) {
-    countdown.innerText = 3;
-    for (let j = 3; j > 0; j--) {
-      countdown.innerText = j;
-      await new Promise((r) => setTimeout(r, 1000));
-    }
-    canvases[i].getContext("2d").drawImage(video, 0, 0, 160, 120);
-    photos.push(canvases[i].toDataURL("image/png"));
-  }
-  countdown.innerText = "";
-  strip.style.display = "";
-  actions.style.display = "";
+
+  actions.style.display = "block";
+
+  const orientation = getSelectedOrientation();
+  strip.classList.remove("horizontal", "vertical");
+  strip.classList.add(orientation);
 }
 
-takePhotosBtn.onclick = takePhotos;
+takePhotosBtn.addEventListener("click", takePhotos);
 
-const orientationRadios = document.getElementsByName("orientation");
-const stripDiv = document.getElementById("strip");
+downloadBtn.addEventListener("click", () => {
+  const orientation = getSelectedOrientation();
+  const stripCanvas = document.createElement("canvas");
 
-function updateStripOrientation() {
-  const orientation = document.querySelector(
-    'input[name="orientation"]:checked'
-  ).value;
-  stripDiv.classList.remove("horizontal", "vertical");
-  stripDiv.classList.add(orientation);
-}
-orientationRadios.forEach((radio) =>
-  radio.addEventListener("change", updateStripOrientation)
-);
-
-// Call once to set initial orientation
-updateStripOrientation();
-
-downloadBtn.onclick = function () {
-  const orientation = document.querySelector(
-    'input[name="orientation"]:checked'
-  ).value;
-  let finalCanvas, ctx;
   if (orientation === "horizontal") {
-    finalCanvas = document.createElement("canvas");
-    finalCanvas.width = 160 * 3;
-    finalCanvas.height = 120;
-    ctx = finalCanvas.getContext("2d");
-    ctx.drawImage(canvas1, 0, 0);
-    ctx.drawImage(canvas2, 160, 0);
-    ctx.drawImage(canvas3, 320, 0);
+    stripCanvas.width = 160 * 3; // remove + 16
+    stripCanvas.height = 120;
   } else {
-    finalCanvas = document.createElement("canvas");
-    finalCanvas.width = 160;
-    finalCanvas.height = 120 * 3;
-    ctx = finalCanvas.getContext("2d");
-    ctx.drawImage(canvas1, 0, 0);
-    ctx.drawImage(canvas2, 0, 120);
-    ctx.drawImage(canvas3, 0, 240);
+    stripCanvas.width = 160;
+    stripCanvas.height = 120 * 3; // remove + 16
   }
-  let link = document.createElement("a");
+
+  const ctx = stripCanvas.getContext("2d");
+
+  canvases.forEach((canvas, i) => {
+    const x = orientation === "horizontal" ? i * 160 : 0;
+    const y = orientation === "vertical" ? i * 120 : 0;
+    ctx.drawImage(canvas, x, y);
+  });
+
+  const link = document.createElement("a");
   link.download = "photobooth_strip.png";
-  link.href = finalCanvas.toDataURL("image/png");
+  link.href = stripCanvas.toDataURL("image/png");
   link.click();
-};
+});
 
-saveBtn.onclick = function () {
-  const orientation = document.querySelector(
-    'input[name="orientation"]:checked'
-  ).value;
-  let finalCanvas, ctx;
-  if (orientation === "horizontal") {
-    finalCanvas = document.createElement("canvas");
-    finalCanvas.width = 160 * 3;
-    finalCanvas.height = 120;
-    ctx = finalCanvas.getContext("2d");
-    ctx.drawImage(canvas1, 0, 0);
-    ctx.drawImage(canvas2, 160, 0);
-    ctx.drawImage(canvas3, 320, 0);
-  } else {
-    finalCanvas = document.createElement("canvas");
-    finalCanvas.width = 160;
-    finalCanvas.height = 120 * 3;
-    ctx = finalCanvas.getContext("2d");
-    ctx.drawImage(canvas1, 0, 0);
-    ctx.drawImage(canvas2, 0, 120);
-    ctx.drawImage(canvas3, 0, 240);
-  }
+// Dummy save (replace with your own backend logic)
+saveBtn.addEventListener("click", () => {
   saveLoader.style.display = "block";
-  finalCanvas.toBlob(function (blob) {
-    const formData = new FormData();
-    formData.append("strip", blob, "photobooth_strip.png");
-    formData.append("orientation", orientation);
-    fetch("/save_photobooth", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        saveLoader.style.display = "none";
-        alert(data.message || "Saved!");
-      })
-      .catch(() => {
-        saveLoader.style.display = "none";
-        alert("Save failed!");
-      });
-  }, "image/png");
-};
+  actions.style.display = "none";
 
-document.getElementById("emotion-btn").onclick = function () {
-  window.location.href = "/pic-chat";
-};
-
-startCamera();
+  setTimeout(() => {
+    alert("Saved to Supabase (not really, lol 😅 implement me)");
+    saveLoader.style.display = "none";
+    actions.style.display = "block";
+  }, 2000);
+});
