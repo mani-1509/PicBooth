@@ -107,7 +107,7 @@ Photos are stored only if you choose to save them. Nothing gets uploaded automat
 
 ## 📄 License
 
-MIT License
+This project is licensed under the [MIT License](LICENSE).
 
 ## ✨ Built By
 
