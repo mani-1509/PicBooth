@@ -22,6 +22,11 @@ def index():
     username = session.get('username')  # Add this line
     return render_template('index.html', user=user, username=username)
 
+@app.route('/privacy-policy')
+def privacy_policy():
+    user = session.get('user')
+    return render_template('privacy-policy.html', user=user)
+
 @app.route('/photobooth')
 def photobooth():
     user = session.get('user')
