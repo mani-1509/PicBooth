@@ -34,9 +34,9 @@ def index():
     return render_template("index.html", user=user, username=username)
 
 
-@app.route('/google3e8e0379edfd04f8.html')
+@app.route("/google3e8e0379edfd04f8.html")
 def google_verification():
-    return send_from_directory('static', 'google3e8e0379edfd04f8.html')
+    return send_from_directory("static", "google3e8e0379edfd04f8.html")
 
 
 @app.route("/robots.txt")
@@ -46,7 +46,7 @@ def robots():
 
 @app.route("/sitemap.xml")
 def sitemap():
-    return send_from_directory("static", "sitemap.xml")
+    return send_from_directory("static", "sitemap.xml", mimetype="application/xml")
 
 
 @app.route("/privacy-policy")
