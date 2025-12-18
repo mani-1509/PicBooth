@@ -1,0 +1,11 @@
+# robots.txt for PicBooth
+User-agent: *
+Allow: /
+Disallow: /history
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://pic-booth.vercel.app/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
