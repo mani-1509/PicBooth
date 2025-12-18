@@ -41,6 +41,7 @@ def google_verification():
     return send_from_directory("static", "google3e8e0379edfd04f8.html")
 
 
+@app.route("/robots.txt")
 @app.route("/robots")
 def robots():
     robots_txt = """User-agent: *
@@ -56,6 +57,7 @@ Crawl-delay: 1"""
     return response
 
 
+@app.route("/sitemap.xml")
 @app.route("/sitemap")
 def sitemap():
     sitemap_xml = """<?xml version="1.0" encoding="UTF-8"?>
