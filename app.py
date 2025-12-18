@@ -58,7 +58,29 @@ Crawl-delay: 1"""
 @app.route("/sitemap.xml")
 @app.route("/sitemap")
 def sitemap():
-    sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>https://pic-booth.vercel.app/</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/photobooth</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.9</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/picchat</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.9</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/chat</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/privacy-policy</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>0.5</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/login</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/signup</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>\n</urlset>'
+    # Get current timestamp in ISO format
+    current_time = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+    pages = [
+        "/",
+        "/photobooth",
+        "/picchat",
+        "/chat",
+        "/privacy-policy",
+        "/login",
+        "/signup",
+    ]
+
+    # Build URL entries
+    url_entries = "".join(
+        [
+            f"  <url>\n    <loc>https://pic-booth.vercel.app{page}</loc>\n    <lastmod>{current_time}</lastmod>\n  </url>\n"
+            for page in pages
+        ]
+    )
+
+    sitemap_xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{url_entries}</urlset>'
+
     return Response(sitemap_xml, mimetype="text/xml; charset=utf-8", status=200)
 
 
