@@ -7,6 +7,8 @@ from flask import (
     redirect,
     url_for,
     send_from_directory,
+    Response,
+    make_response,
 )
 import os
 from datetime import datetime
@@ -41,12 +43,69 @@ def google_verification():
 
 @app.route("/robots.txt")
 def robots():
-    return send_from_directory("static", "robots.txt")
+    robots_txt = """User-agent: *
+Allow: /
+Disallow: /history
+Disallow: /api/
+
+Sitemap: https://pic-booth.vercel.app/sitemap.xml
+
+Crawl-delay: 1"""
+    response = make_response(robots_txt)
+    response.headers["Content-Type"] = "text/plain"
+    return response
 
 
 @app.route("/sitemap.xml")
 def sitemap():
-    return send_from_directory("static", "sitemap.xml", mimetype="application/xml")
+    sitemap_xml = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://pic-booth.vercel.app/</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pic-booth.vercel.app/photobooth</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pic-booth.vercel.app/picchat</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pic-booth.vercel.app/chat</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pic-booth.vercel.app/privacy-policy</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pic-booth.vercel.app/login</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pic-booth.vercel.app/signup</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>"""
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+    return response
 
 
 @app.route("/privacy-policy")
