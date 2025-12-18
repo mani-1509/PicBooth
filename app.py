@@ -58,52 +58,8 @@ Crawl-delay: 1"""
 @app.route("/sitemap.xml")
 @app.route("/sitemap")
 def sitemap():
-    sitemap_xml = """<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://pic-booth.vercel.app/</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://pic-booth.vercel.app/photobooth</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://pic-booth.vercel.app/picchat</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://pic-booth.vercel.app/chat</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pic-booth.vercel.app/privacy-policy</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://pic-booth.vercel.app/login</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://pic-booth.vercel.app/signup</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-</urlset>"""
-    return Response(sitemap_xml, mimetype="application/xml; charset=utf-8", status=200)
+    sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>https://pic-booth.vercel.app/</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/photobooth</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.9</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/picchat</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.9</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/chat</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/privacy-policy</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>0.5</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/login</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>\n  <url>\n    <loc>https://pic-booth.vercel.app/signup</loc>\n    <lastmod>2025-12-19</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>\n</urlset>'
+    return Response(sitemap_xml, mimetype="text/xml; charset=utf-8", status=200)
 
 
 @app.route("/privacy-policy")
