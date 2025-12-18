@@ -52,9 +52,7 @@ Disallow: /api/
 Sitemap: https://pic-booth.vercel.app/sitemap.xml
 
 Crawl-delay: 1"""
-    response = make_response(robots_txt)
-    response.headers["Content-Type"] = "text/plain"
-    return response
+    return Response(robots_txt, mimetype="text/plain", status=200)
 
 
 @app.route("/sitemap.xml")
@@ -105,9 +103,7 @@ def sitemap():
     <priority>0.6</priority>
   </url>
 </urlset>"""
-    response = make_response(sitemap_xml)
-    response.headers["Content-Type"] = "application/xml"
-    return response
+    return Response(sitemap_xml, mimetype="application/xml", status=200)
 
 
 @app.route("/privacy-policy")
