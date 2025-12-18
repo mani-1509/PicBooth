@@ -54,6 +54,15 @@ Sitemap: https://pic-booth.vercel.app/sitemap.xml
 Crawl-delay: 1"""
     return Response(robots_txt, mimetype="text/plain; charset=utf-8", status=200)
 
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "favicon.svg",
+        mimetype="image/svg+xml",
+    )
+
+@app.route("/sitemap-2.xml")
 
 @app.route("/sitemap.xml")
 @app.route("/sitemap")
