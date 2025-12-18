@@ -63,6 +63,8 @@ def favicon():
     )
 
 @app.route("/sitemap-2.xml")
+def sitemap_2():
+    return render_template("sitemap-2.xml"), 200, {"Content-Type": "application/xml"}
 
 @app.route("/sitemap.xml")
 @app.route("/sitemap")
